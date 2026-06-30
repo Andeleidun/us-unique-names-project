@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "us-unique-names"
+version = "0.1.0"
+description = "Privacy-preserving U.S. unique first and last name set builder"
+requires-python = ">=3.10"
+dependencies = [
+  "duckdb>=1.0.0",
+  "pandas>=2.0.0",
+  "openpyxl>=3.1.0",
+  "pyarrow>=15.0.0",
+  "PyYAML>=6.0.0"
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

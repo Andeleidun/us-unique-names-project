@@ -1,0 +1,98 @@
+# v0.1 source registry for privacy-preserving name-set extraction.
+# All public release exports must contain only the deduplicated name string.
+sources:
+  - source_id: census_2020_first_names_by_sex
+    name: 2020 Census Frequently Occurring First Names by Sex
+    source_category: census_aggregate
+    url: https://www2.census.gov/topics/genealogy/2020surnames/Names2020_FirstNames_Sex.xlsx
+    landing_page: https://www.census.gov/topics/population/genealogy/data/2020_names.html
+    license: U.S. government public data
+    access_method: download
+    file_name: Names2020_FirstNames_Sex.xlsx
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    enabled: true
+    allowed_outputs: [first]
+    parser: census_xlsx_name_column
+    notes: Use only first-name strings; discard counts, sex, and all frequency fields.
+
+  - source_id: census_2020_last_names_race_hispanic
+    name: 2020 Census Frequently Occurring Last Names by Race and Hispanic Origin
+    source_category: census_aggregate
+    url: https://www2.census.gov/topics/genealogy/2020surnames/Names2020_LastNames_RaceHispanic.xlsx
+    landing_page: https://www.census.gov/topics/population/genealogy/data/2020_names.html
+    license: U.S. government public data
+    access_method: download
+    file_name: Names2020_LastNames_RaceHispanic.xlsx
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    enabled: true
+    allowed_outputs: [last]
+    parser: census_xlsx_name_column
+    notes: Use only last-name strings; discard race, Hispanic origin, counts, and frequency fields.
+
+  - source_id: census_2010_surnames
+    name: 2010 Census Surnames Occurring 100 or More Times
+    source_category: census_aggregate
+    url: https://www2.census.gov/topics/genealogy/2010surnames/names.zip
+    landing_page: https://www.census.gov/topics/population/genealogy/data/2010_surnames.html
+    license: U.S. government public data
+    access_method: download
+    file_name: census_2010_surnames.zip
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    enabled: true
+    allowed_outputs: [last]
+    parser: census_2010_surnames_zip
+    notes: Use only surname strings; discard counts and demographic breakdowns.
+
+  - source_id: ssa_national_baby_names
+    name: SSA Baby Names from Social Security Card Applications - National Data
+    source_category: ssa_aggregate
+    url: https://www.ssa.gov/oact/babynames/names.zip
+    landing_page: https://catalog.data.gov/dataset/baby-names-from-social-security-card-applications-national-data
+    license: CC0 1.0 public domain dedication according to Data.gov catalog metadata
+    access_method: download
+    file_name: ssa_names_national.zip
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    enabled: true
+    allowed_outputs: [first]
+    parser: ssa_national_zip
+    notes: Use only the name field; discard year, sex, and count.
+
+  - source_id: ssa_state_baby_names
+    name: SSA Baby Names from Social Security Card Applications - State and District of Columbia Data
+    source_category: ssa_aggregate
+    url: https://www.ssa.gov/oact/babynames/state/namesbystate.zip
+    landing_page: https://www.ssa.gov/oact/babynames/limits.html
+    license: U.S. government public data
+    access_method: download
+    file_name: ssa_names_state.zip
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    enabled: false
+    allowed_outputs: [first]
+    parser: ssa_state_zip
+    notes: Optional expansion; use only the name field and discard state, year, sex, and count.
+
+  - source_id: ssa_territory_baby_names
+    name: SSA Baby Names from Social Security Card Applications - Territory Data
+    source_category: ssa_aggregate
+    url: https://www.ssa.gov/oact/babynames/territory/namesbyterritory.zip
+    landing_page: https://www.ssa.gov/oact/babynames/limits.html
+    license: U.S. government public data
+    access_method: download
+    file_name: ssa_names_territory.zip
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    enabled: false
+    allowed_outputs: [first]
+    parser: ssa_territory_zip
+    notes: Optional expansion; use only the name field and discard territory, year, sex, and count.

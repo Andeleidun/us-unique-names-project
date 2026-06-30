@@ -1,0 +1,261 @@
+# Source registry for the privacy-preserving U.S. unique names dataset.
+# Public canonical outputs may contain only deduplicated name strings.
+
+sources:
+  - source_id: census_2020_first_names_by_sex
+    name: 2020 Census First Names by Sex
+    source_category: census_aggregate
+    source_url: https://www.census.gov/topics/population/genealogy/data/2020_names.html
+    download_url: https://www2.census.gov/topics/genealogy/2020surnames/Names2020_FirstNames_Sex.xlsx
+    file_name: Names2020_FirstNames_Sex.xlsx
+    parser: census_xlsx_name_column
+    expected_rows:
+      min: 53616
+      max: 53616
+    enabled: true
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: true
+    allowed_outputs: [first]
+    excluded_fields: [counts, sex, race, hispanic_origin, geography]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: >-
+      Census states the 2020 name release is summarized aggregate data and does not identify specific individuals.
+      Use only first-name fields; discard all counts and demographic columns in public outputs.
+
+  - source_id: census_2020_last_names_race_hispanic
+    name: 2020 Census Last Names by Race and Hispanic Origin
+    source_category: census_aggregate
+    source_url: https://www.census.gov/topics/population/genealogy/data/2020_names.html
+    download_url: https://www2.census.gov/topics/genealogy/2020surnames/Names2020_LastNames_RaceHispanic.xlsx
+    file_name: Names2020_LastNames_RaceHispanic.xlsx
+    parser: census_xlsx_name_column
+    expected_rows:
+      min: 156620
+      max: 156620
+    enabled: true
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: true
+    allowed_outputs: [last]
+    excluded_fields: [counts, race, hispanic_origin, geography]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: Use only last-name fields; do not export demographic counts or disclosure-avoidance fields.
+
+  - source_id: census_2010_surnames
+    name: 2010 Census Surnames Occurring 100 or More Times
+    source_category: census_aggregate
+    source_url: https://www.census.gov/topics/population/genealogy/data/2010_surnames.html
+    download_url: https://www2.census.gov/topics/genealogy/2010surnames/names.zip
+    file_name: census_2010_surnames.zip
+    parser: census_2010_surnames_zip
+    expected_rows:
+      min: 162254
+      max: 162254
+    enabled: true
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: true
+    allowed_outputs: [last]
+    excluded_fields: [counts, rank, proportion, race, hispanic_origin]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: Complete Census 2010 surname file contains 162,253 names occurring 100 or more times.
+
+  - source_id: ssa_national_baby_names
+    name: SSA National Baby Names
+    source_category: ssa_aggregate
+    source_url: https://www.ssa.gov/oact/babynames/limits.html
+    download_url: https://www.ssa.gov/oact/babynames/names.zip
+    file_name: ssa_names_national.zip
+    parser: ssa_national_zip
+    expected_rows:
+      min: 100000
+    enabled: true
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: false
+    allowed_outputs: [first]
+    excluded_fields: [birth_year, sex, counts]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: >-
+      SSA provides national files for researchers and excludes names with fewer than five occurrences for privacy.
+      SSA removes spaces and punctuation in names, so this source should confirm first-name existence but should not overwrite richer display forms from other sources.
+
+  - source_id: census_2000_surnames
+    name: Census 2000 Surnames Occurring 100 or More Times
+    source_category: census_aggregate
+    source_url: https://www.census.gov/topics/population/genealogy/data/2000_surnames.html
+    download_url: https://www2.census.gov/topics/genealogy/2000surnames/names.zip
+    file_name: census_2000_surnames.zip
+    parser: census_2000_surnames_zip
+    enabled: false
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: true
+    allowed_outputs: [last]
+    excluded_fields: [counts, rank, proportion, race, hispanic_origin]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: Optional comparison source; keep disabled for the precision-first v0.1 baseline.
+
+  - source_id: census_1990_last_names
+    name: 1990 Census Last Names File
+    source_category: census_aggregate
+    source_url: https://www.census.gov/topics/population/genealogy/data/1990_census/1990_census_namefiles.html
+    download_url: https://www2.census.gov/topics/genealogy/1990surnames/dist.all.last
+    file_name: census_1990_last_names.txt
+    parser: census_1990_txt
+    enabled: false
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: true
+    allowed_outputs: [last]
+    excluded_fields: [frequency_percent, cumulative_frequency_percent, rank]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: Optional older aggregate file for historical comparison.
+
+  - source_id: census_1990_female_first_names
+    name: 1990 Census Female First Names File
+    source_category: census_aggregate
+    source_url: https://www.census.gov/topics/population/genealogy/data/1990_census/1990_census_namefiles.html
+    download_url: https://www2.census.gov/topics/genealogy/1990surnames/dist.female.first
+    file_name: census_1990_female_first_names.txt
+    parser: census_1990_txt
+    enabled: false
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: true
+    allowed_outputs: [first]
+    excluded_fields: [frequency_percent, cumulative_frequency_percent, rank]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: Optional older aggregate first-name file.
+
+  - source_id: census_1990_male_first_names
+    name: 1990 Census Male First Names File
+    source_category: census_aggregate
+    source_url: https://www.census.gov/topics/population/genealogy/data/1990_census/1990_census_namefiles.html
+    download_url: https://www2.census.gov/topics/genealogy/1990surnames/dist.male.first
+    file_name: census_1990_male_first_names.txt
+    parser: census_1990_txt
+    enabled: false
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: true
+    allowed_outputs: [first]
+    excluded_fields: [frequency_percent, cumulative_frequency_percent, rank]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: Optional older aggregate first-name file.
+
+  - source_id: ssa_state_baby_names
+    name: SSA State-Specific Baby Names
+    source_category: ssa_aggregate
+    source_url: https://www.ssa.gov/oact/babynames/limits.html
+    download_url: https://www.ssa.gov/oact/babynames/state/namesbystate.zip
+    file_name: ssa_names_state.zip
+    parser: ssa_state_zip
+    enabled: false
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: false
+    allowed_outputs: [first]
+    excluded_fields: [state, birth_year, sex, counts]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: Optional expansion; use only the name field and discard state, year, sex, and count.
+
+  - source_id: ssa_territory_baby_names
+    name: SSA Territory-Specific Baby Names
+    source_category: ssa_aggregate
+    source_url: https://www.ssa.gov/oact/babynames/limits.html
+    download_url: https://www.ssa.gov/oact/babynames/territory/namesbyterritory.zip
+    file_name: ssa_names_territory.zip
+    parser: ssa_territory_zip
+    enabled: false
+    license: public_domain_or_us_gov
+    access_method: download
+    raw_storage_allowed: true
+    structured_fields_available: true
+    review_required: false
+    display_authority: false
+    allowed_outputs: [first]
+    excluded_fields: [territory, birth_year, sex, counts]
+    retention:
+      retain_raw_file: true
+      persist_person_rows: false
+      stream_only_fields: [name]
+    notes: Optional expansion; use only the name field and discard territory, year, sex, and count.
+
+  - source_id: nppes_npi_v2_individual_providers
+    name: NPPES NPI Data Dissemination Version 2 Individual Providers
+    source_category: modern_public_record_structured
+    source_url: https://download.cms.gov/nppes/NPI_Files.html
+    download_url: https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip
+    file_name: nppes_npi_v2_individual_providers.zip
+    parser: nppes_v2_individual_provider_names
+    enabled: false
+    license: public_domain_or_us_gov_foia_disclosable
+    access_method: download
+    raw_storage_allowed: false
+    structured_fields_available: true
+    review_required: true
+    display_authority: true
+    allowed_outputs: [first, last]
+    excluded_fields: [npi, addresses, phone_numbers, taxonomy, endpoints, practice_locations, organization_names, enumeration_dates]
+    retention:
+      retain_raw_file: false
+      persist_person_rows: false
+      stream_only_fields: [provider_first_name, provider_last_name, provider_middle_name_if_approved_later]
+    notes: >-
+      Pilot metadata only. Do not ingest until stream-and-discard controls are tested and explicitly approved.

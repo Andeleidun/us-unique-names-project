@@ -1,0 +1,23 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Local work databases and downloaded source material.
+data/work/*
+!data/work/.gitkeep
+data/raw/*
+!data/raw/.gitkeep
+names/
+names.zip
+
+# Generated releases should be reproducible from source files and the DB.
+data/releases/*
+!data/releases/.gitkeep
+
+# Local scratch files.
+.tmp/
+tmp/
