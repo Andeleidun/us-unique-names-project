@@ -114,6 +114,7 @@ def cmd_build_baseline(args: argparse.Namespace) -> None:
         overwrite_db=args.overwrite_db,
         skip_count_checks=args.skip_count_checks,
         source_paths=source_paths,
+        release_version=args.release_version,
     )
     print(json.dumps(notes, indent=2))
 
@@ -204,6 +205,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--overwrite-db", action="store_true")
     p.add_argument("--skip-count-checks", action="store_true")
     p.add_argument("--source-path", action="append", default=[], help="Override one source path as source_id=path")
+    p.add_argument("--release-version", help="Release label to include in generated release notes")
     p.set_defaults(func=cmd_build_baseline)
 
     p = sub.add_parser("ingest-ssa-national")

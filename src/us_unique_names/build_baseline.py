@@ -24,10 +24,17 @@ def _clean_release_dir(release_dir: Path) -> None:
             path.unlink()
 
 
-def _write_release_notes(release_dir: Path, included: list[str], failures: list[dict[str, str]]) -> None:
+def _write_release_notes(
+    release_dir: Path,
+    included: list[str],
+    failures: list[dict[str, str]],
+    source_paths: dict[str, str | Path],
+    release_version: str | None = None,
+) -> None:
     """Write human-readable release notes for an automated baseline build."""
+    title = f"{release_version} Release notes" if release_version else "Release notes"
     lines = [
-        "# Release notes",
+        f"# {title}",
         "",
         "Automated baseline build.",
         "",
@@ -38,6 +45,12 @@ def _write_release_notes(release_dir: Path, included: list[str], failures: list[
     if failures:
         lines.extend(["", "Failed or skipped enabled sources:", ""])
         lines.extend(f"- `{item['source_id']}`: {item['stage']} failed: {item['error']}" for item in failures)
+    if source_paths:
+        lines.extend(["", "Local source overrides:", ""])
+        lines.extend(
+            f"- `{source_id}`: supplied from `{Path(path).as_posix()}`"
+            for source_id, path in sorted(source_paths.items())
+        )
     lines.extend([
         "",
         "Public canonical CSV files contain only one `name` column.",
@@ -55,6 +68,7 @@ def build_baseline(
     overwrite_db: bool = False,
     skip_count_checks: bool = False,
     source_paths: dict[str, str | Path] | None = None,
+    release_version: str | None = None,
 ) -> dict[str, Any]:
     """Download, ingest enabled sources, export, validate, and report a baseline release."""
     sources_path = Path(sources_path)
@@ -114,7 +128,7 @@ def build_baseline(
             failures.append({"source_id": source_id, "stage": "ingest", "error": str(exc)})
 
     _clean_release_dir(release_dir)
-    _write_release_notes(release_dir, included, failures)
+    _write_release_notes(release_dir, included, failures, source_paths, release_version)
     build_notes = {
         "included": included,
         "failures": failures,

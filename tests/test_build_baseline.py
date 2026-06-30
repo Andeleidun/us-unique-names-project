@@ -48,10 +48,14 @@ def test_build_baseline_cleans_stale_release_files_and_records_final_manifest_co
         release_dir,
         overwrite_db=True,
         source_paths={"ssa_national_baby_names": source_dir},
+        release_version="v0.1.0",
     )
 
     assert not (release_dir / "stale.txt").exists()
     build_notes = json.loads((release_dir / "build_notes.json").read_text(encoding="utf-8"))
     manifest = json.loads((release_dir / "manifest.json").read_text(encoding="utf-8"))
+    release_notes = (release_dir / "release_notes.md").read_text(encoding="utf-8")
     assert build_notes["manifest_artifact_count"] == len(manifest["artifacts"])
     assert build_notes["validation"]["ok"]
+    assert "# v0.1.0 Release notes" in release_notes
+    assert "`ssa_national_baby_names`: supplied from" in release_notes
