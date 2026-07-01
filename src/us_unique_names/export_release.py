@@ -25,6 +25,10 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def _same_path(left: Path, right: Path) -> bool:
+    return left.resolve() == right.resolve()
+
+
 def _write_csv(path: Path, names: list[str]) -> None:
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
@@ -133,12 +137,16 @@ def export_release(
         con.close()
 
     if include_duckdb:
-        shutil.copy2(db_path, release_dir / "names.duckdb")
+        release_db_path = release_dir / "names.duckdb"
+        if not _same_path(db_path, release_db_path):
+            shutil.copy2(db_path, release_db_path)
     if sources_yaml:
         shutil.copy2(sources_yaml, release_dir / "sources.yaml")
-    license_path = Path(__file__).resolve().parents[2] / "LICENSE"
-    if license_path.exists():
-        shutil.copy2(license_path, release_dir / "LICENSE")
+    repo_root = Path(__file__).resolve().parents[2]
+    for metadata_filename in ["LICENSE", "CITATION.cff", ".zenodo.json", "SOURCE_CITATIONS.md"]:
+        metadata_path = repo_root / metadata_filename
+        if metadata_path.exists():
+            shutil.copy2(metadata_path, release_dir / metadata_filename)
 
     release_notes = release_dir / "release_notes.md"
     if not release_notes.exists():

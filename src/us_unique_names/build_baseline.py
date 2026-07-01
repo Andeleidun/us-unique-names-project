@@ -67,6 +67,7 @@ def _write_release_notes(
         "",
         "- The dataset compilation, processing code, documentation, and release metadata are licensed under Creative Commons Attribution 4.0 International (`CC-BY-4.0`).",
         "- Underlying source data may be public domain or governed by their source terms.",
+        "- Upstream source citations and source identifiers are listed in `SOURCE_CITATIONS.md`.",
         "",
         "Metadata contains only safe source-level fields.",
     ])

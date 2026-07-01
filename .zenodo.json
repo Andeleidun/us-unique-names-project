@@ -1,0 +1,74 @@
+{
+  "title": "U.S. Unique First and Last Name Sets v0.1.0: Aggregate Baseline",
+  "upload_type": "dataset",
+  "description": "Precision-first aggregate baseline of unique U.S. first-name and last-name spellings derived from selected Census and SSA aggregate sources. Public canonical files contain one title-cased name column. This release is not exhaustive U.S. name coverage; source coverage is thresholded by original Census and SSA publication rules. The dataset compilation, processing code, documentation, and release metadata are licensed under CC BY 4.0. Underlying source data may be public domain or governed by their source terms.",
+  "creators": [
+    {
+      "name": "U.S. Unique First and Last Name Sets contributors"
+    }
+  ],
+  "version": "0.1.0",
+  "doi": "10.5281/zenodo.21100479",
+  "publication_date": "2026-07-01",
+  "license": "cc-by-4.0",
+  "keywords": [
+    "names",
+    "first names",
+    "last names",
+    "surnames",
+    "United States",
+    "Census",
+    "SSA",
+    "open data",
+    "privacy-preserving"
+  ],
+  "access_right": "open",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/Andeleidun/us-unique-names-project",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www.census.gov/topics/population/genealogy/data/2020_names.html",
+      "relation": "isDerivedFrom",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www2.census.gov/topics/genealogy/2020surnames/Names2020_FirstNames_Sex.xlsx",
+      "relation": "isDerivedFrom",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www2.census.gov/topics/genealogy/2020surnames/Names2020_LastNames_RaceHispanic.xlsx",
+      "relation": "isDerivedFrom",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www.census.gov/topics/population/genealogy/data/2010_surnames.html",
+      "relation": "isDerivedFrom",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www2.census.gov/topics/genealogy/2010surnames/names.zip",
+      "relation": "isDerivedFrom",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www.ssa.gov/oact/babynames/limits.html",
+      "relation": "isDerivedFrom",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www.ssa.gov/oact/babynames/names.zip",
+      "relation": "isDerivedFrom",
+      "scheme": "url"
+    }
+  ],
+  "references": [
+    "U.S. Census Bureau. (2026, April 14). Frequently Occurring First Names in the 2020 Census by Sex [Data set]. U.S. Department of Commerce. https://www.census.gov/topics/population/genealogy/data/2020_names.html",
+    "U.S. Census Bureau. (2026, April 14). Frequently Occurring Last Names in the 2020 Census by Race and Hispanic Origin [Data set]. U.S. Department of Commerce. https://www.census.gov/topics/population/genealogy/data/2020_names.html",
+    "U.S. Census Bureau. (2021, October 8). Frequently Occurring Surnames from the 2010 Census [Data set]. U.S. Department of Commerce. https://www.census.gov/topics/population/genealogy/data/2010_surnames.html",
+    "U.S. Social Security Administration. (n.d.). Popular Baby Names: National Data [Data set]. https://www.ssa.gov/oact/babynames/limits.html"
+  ]
+}

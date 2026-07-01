@@ -175,3 +175,17 @@ LICENSE
 build_notes.json
 release_coverage.json
 ```
+
+## Zenodo release
+
+Zenodo-ready metadata is provided in `.zenodo.json`, and repository citation metadata is provided in `CITATION.cff`. The v0.1.0 Zenodo DOI is `10.5281/zenodo.21100479`.
+Upstream source citations and source identifiers are listed in `SOURCE_CITATIONS.md`.
+
+For the first Zenodo deposit, upload both release ZIPs:
+
+```text
+data/releases/us-unique-names-v0.1.0-public.zip
+data/releases/us-unique-names-v0.1.0-reproducibility.zip
+```
+
+Use DOI `10.5281/zenodo.21100479` when citing the v0.1.0 dataset release.

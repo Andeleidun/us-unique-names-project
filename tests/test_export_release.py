@@ -35,6 +35,9 @@ def test_export_release_roundtrip(tmp_path: Path):
     assert (release_dir / "checksums.sha256").exists()
     assert (release_dir / "sources.yaml").exists()
     assert (release_dir / "LICENSE").exists()
+    assert (release_dir / "CITATION.cff").exists()
+    assert (release_dir / ".zenodo.json").exists()
+    assert (release_dir / "SOURCE_CITATIONS.md").exists()
 
 
 def test_title_case_release_name_handles_word_separators():
@@ -77,6 +80,24 @@ def test_release_validation_uses_metadata_without_duckdb_for_trusted_single_toke
 
     release_dir = tmp_path / "release"
     export_release(db, release_dir, Path("config/sources.yaml"), include_duckdb=False)
+    ok, errors, warnings = validate_release_dir(release_dir)
+    assert ok, errors
+    assert warnings == []
+
+
+def test_export_release_can_refresh_directory_containing_source_db(tmp_path: Path):
+    release_dir = tmp_path / "release"
+    release_dir.mkdir()
+    db = release_dir / "names.duckdb"
+    init_db(db, Path("schemas/names.sql"))
+    load_sources(db, Path("config/sources.yaml"))
+    run_id = start_source_run(db, "ssa_national_baby_names")
+    ingest_names(db, run_id, "ssa_national_baby_names", "ssa_aggregate", [("MARY", "first", "name")])
+    complete_source_run(db, run_id)
+
+    export_release(db, release_dir, Path("config/sources.yaml"), include_duckdb=True)
+    export_release(db, release_dir, Path("config/sources.yaml"), include_duckdb=True)
+
     ok, errors, warnings = validate_release_dir(release_dir)
     assert ok, errors
     assert warnings == []

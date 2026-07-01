@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it using the metadata below."
+type: dataset
+title: "U.S. Unique First and Last Name Sets v0.1.0: Aggregate Baseline"
+version: "0.1.0"
+date-released: "2026-07-01"
+doi: "10.5281/zenodo.21100479"
+license: "CC-BY-4.0"
+url: "https://doi.org/10.5281/zenodo.21100479"
+repository-code: "https://github.com/Andeleidun/us-unique-names-project"
+abstract: "Precision-first aggregate baseline of unique U.S. first-name and last-name spellings derived from selected Census and SSA aggregate sources. Public canonical files contain one title-cased name column. This release is not exhaustive U.S. name coverage."
+authors:
+  - name: "U.S. Unique First and Last Name Sets contributors"
+keywords:
+  - names
+  - first names
+  - last names
+  - surnames
+  - United States
+  - Census
+  - SSA
+  - open data
+  - privacy-preserving
