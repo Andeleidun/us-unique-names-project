@@ -6,12 +6,15 @@ import json
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
+import re
 
 import duckdb
 import pandas as pd
 
-from .normalize import make_sort_key
+from .normalize import make_sort_key, normalize_name
 from .validate import validate_public_rows
+
+_LETTER_RUN_RE = re.compile(r"[^\W\d_]+", re.UNICODE)
 
 
 def sha256_file(path: Path) -> str:
@@ -30,6 +33,11 @@ def _write_csv(path: Path, names: list[str]) -> None:
             writer.writerow([name])
 
 
+def title_case_release_name(name: str) -> str:
+    """Return the public-release display form for one name."""
+    return _LETTER_RUN_RE.sub(lambda match: match.group(0).capitalize(), name)
+
+
 def _query_names(con: duckdb.DuckDBPyConnection, name_type: str) -> list[str]:
     rows = con.execute(
         """
@@ -40,11 +48,11 @@ def _query_names(con: duckdb.DuckDBPyConnection, name_type: str) -> list[str]:
         """,
         [name_type],
     ).fetchall()
-    return [row[0] for row in rows]
+    return [title_case_release_name(row[0]) for row in rows]
 
 
 def _query_metadata(con: duckdb.DuckDBPyConnection, name_type: str) -> pd.DataFrame:
-    return con.execute(
+    df = con.execute(
         """
         SELECT
           n.name_display AS name,
@@ -60,32 +68,52 @@ def _query_metadata(con: duckdb.DuckDBPyConnection, name_type: str) -> pd.DataFr
         """,
         [name_type],
     ).fetchdf()
+    if not df.empty:
+        df["name"] = df["name"].map(title_case_release_name)
+    return df
 
 
 def _trusted_single_token_keys(release_dir: Path, name_type: str) -> set[str]:
     db_path = release_dir / "names.duckdb"
-    if not db_path.exists():
+    if db_path.exists():
+        con = duckdb.connect(str(db_path), read_only=True)
+        try:
+            rows = con.execute(
+                """
+                SELECT DISTINCT n.name_key
+                FROM names n
+                JOIN source_assertions sa
+                  ON sa.name_type = n.name_type AND sa.name_key = n.name_key
+                WHERE n.name_type = ?
+                  AND sa.source_category IN ('census_aggregate', 'ssa_aggregate')
+                  AND regexp_matches(n.name_display, '^[^ ]+$')
+                """,
+                [name_type],
+            ).fetchall()
+        finally:
+            con.close()
+        return {row[0] for row in rows}
+
+    metadata_path = release_dir / f"{name_type}_name_metadata.csv"
+    if not metadata_path.exists():
         return set()
-    con = duckdb.connect(str(db_path), read_only=True)
-    try:
-        rows = con.execute(
-            """
-            SELECT DISTINCT n.name_key
-            FROM names n
-            JOIN source_assertions sa
-              ON sa.name_type = n.name_type AND sa.name_key = n.name_key
-            WHERE n.name_type = ?
-              AND sa.source_category IN ('census_aggregate', 'ssa_aggregate')
-              AND regexp_matches(n.name_display, '^[^ ]+$')
-            """,
-            [name_type],
-        ).fetchall()
-    finally:
-        con.close()
-    return {row[0] for row in rows}
+    keys = set()
+    with metadata_path.open("r", encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            name = row.get("name", "")
+            categories = set(str(row.get("source_categories", "")).split(";"))
+            normalized = normalize_name(name)
+            if normalized and " " not in normalized.display and categories.intersection({"census_aggregate", "ssa_aggregate"}):
+                keys.add(normalized.name_key)
+    return keys
 
 
-def export_release(db_path: str | Path, release_dir: str | Path, sources_yaml: str | Path | None = None) -> dict:
+def export_release(
+    db_path: str | Path,
+    release_dir: str | Path,
+    sources_yaml: str | Path | None = None,
+    include_duckdb: bool = True,
+) -> dict:
     db_path = Path(db_path)
     release_dir = Path(release_dir)
     release_dir.mkdir(parents=True, exist_ok=True)
@@ -104,9 +132,13 @@ def export_release(db_path: str | Path, release_dir: str | Path, sources_yaml: s
     finally:
         con.close()
 
-    shutil.copy2(db_path, release_dir / "names.duckdb")
+    if include_duckdb:
+        shutil.copy2(db_path, release_dir / "names.duckdb")
     if sources_yaml:
         shutil.copy2(sources_yaml, release_dir / "sources.yaml")
+    license_path = Path(__file__).resolve().parents[2] / "LICENSE"
+    if license_path.exists():
+        shutil.copy2(license_path, release_dir / "LICENSE")
 
     release_notes = release_dir / "release_notes.md"
     if not release_notes.exists():
@@ -178,5 +210,8 @@ def validate_release_dir(release_dir: str | Path) -> tuple[bool, list[str], list
                 errors.append(f"checksum mismatch for {filename}")
     else:
         errors.append("missing checksums.sha256")
+
+    if not (release_dir / "LICENSE").exists():
+        errors.append("missing LICENSE")
 
     return not errors, errors, warnings

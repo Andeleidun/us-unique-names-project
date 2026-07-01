@@ -36,7 +36,9 @@ def _write_release_notes(
     lines = [
         f"# {title}",
         "",
-        "Automated baseline build.",
+        "U.S. Unique First and Last Name Sets - aggregate baseline.",
+        "",
+        "This is a precision-first baseline built from selected aggregate Census and SSA sources. It is not exhaustive U.S. name coverage.",
         "",
         "Included sources:",
         "",
@@ -53,7 +55,19 @@ def _write_release_notes(
         )
     lines.extend([
         "",
-        "Public canonical CSV files contain only one `name` column.",
+        "Scope and data-quality notes:",
+        "",
+        "- Public canonical CSV files contain only one `name` column.",
+        "- Public name displays are title-cased for release usability; source-observed casing is retained in the DuckDB reproducibility bundle.",
+        "- Source coverage is thresholded by the original Census and SSA publication rules.",
+        "- Names can appear in both first-name and last-name files; this overlap is expected.",
+        "- OCR, person-level records, historical unstructured records, and disabled optional sources are not included in this baseline.",
+        "",
+        "License and source terms:",
+        "",
+        "- The dataset compilation, processing code, documentation, and release metadata are licensed under Creative Commons Attribution 4.0 International (`CC-BY-4.0`).",
+        "- Underlying source data may be public domain or governed by their source terms.",
+        "",
         "Metadata contains only safe source-level fields.",
     ])
     (release_dir / "release_notes.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

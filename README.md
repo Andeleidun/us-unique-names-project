@@ -7,9 +7,11 @@ This repository is the execution scaffold for a privacy-preserving project that 
 
 Each public file contains exactly one column, `name`. No full names, person records, locations, dates, URLs, IDs, occupations, employers, household relationships, or other identifying context are exported.
 
+Public release names are title-cased for usability. Source-observed casing is retained in the DuckDB reproducibility bundle.
+
 ## v0.1 goal
 
-Build a precision-first baseline release from high-structure aggregate sources enabled in `config/sources.yaml`:
+Build a precision-first aggregate baseline release from high-structure sources enabled in `config/sources.yaml`. This is not exhaustive U.S. name coverage.
 
 1. 2020 Census first names
 2. 2020 Census last names
@@ -17,6 +19,12 @@ Build a precision-first baseline release from high-structure aggregate sources e
 4. SSA national baby names
 
 Optional configured sources are disabled until explicitly enabled: Census 1990, Census 2000, SSA state, SSA territory, and the NPPES pilot metadata.
+
+## License
+
+Public dataset releases, metadata, documentation, and dataset builder source files are licensed under the Creative Commons Attribution 4.0 International License (`CC-BY-4.0`). Use should include attribution to the U.S. Unique First and Last Name Sets contributors and a link to the license.
+
+The license applies to the dataset compilation, processing code, documentation, and release metadata. Underlying source data may be public domain or governed by their source terms.
 
 ## Important retention rule
 
@@ -133,7 +141,23 @@ python -m pytest
 
 ## Release contents
 
-A successful release directory contains:
+The recommended public artifact is:
+
+```text
+us-unique-names-v0.1.0-public.zip
+```
+
+It contains the public CSV/Parquet files, safe metadata, source registry copy, manifest, checksums, release notes, and license. It does not include `names.duckdb`.
+
+The reproducibility artifact is:
+
+```text
+us-unique-names-v0.1.0-reproducibility.zip
+```
+
+It contains the same public files plus `names.duckdb`, `build_notes.json`, and `release_coverage.json`.
+
+A full reproducibility release directory contains:
 
 ```text
 first_names.csv
@@ -147,6 +171,7 @@ manifest.json
 checksums.sha256
 sources.yaml
 release_notes.md
+LICENSE
 build_notes.json
 release_coverage.json
 ```

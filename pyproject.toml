@@ -7,6 +7,7 @@ name = "us-unique-names"
 version = "0.1.0"
 description = "Privacy-preserving U.S. unique first and last name set builder"
 requires-python = ">=3.10"
+license = { text = "CC-BY-4.0" }
 dependencies = [
   "duckdb>=1.0.0",
   "pandas>=2.0.0",

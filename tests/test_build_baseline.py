@@ -58,4 +58,8 @@ def test_build_baseline_cleans_stale_release_files_and_records_final_manifest_co
     assert build_notes["manifest_artifact_count"] == len(manifest["artifacts"])
     assert build_notes["validation"]["ok"]
     assert "# v0.1.0 Release notes" in release_notes
+    assert "precision-first baseline" in release_notes
+    assert "not exhaustive U.S. name coverage" in release_notes
     assert "`ssa_national_baby_names`: supplied from" in release_notes
+    assert "CC-BY-4.0" in release_notes
+    assert "Underlying source data may be public domain or governed by their source terms" in release_notes
